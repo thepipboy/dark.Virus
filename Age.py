@@ -40,14 +40,14 @@ vaccine_params = {
 
 # Contact matrix (who interacts with whom)
 # Rows: infector age group, Columns: infectee age group
-contact_matrix = np.array([
-    [8.0, 3.0, 0.5],   # Young: mostly interact with other young
-    [3.0, 6.0, 1.5],   # Adults: interact with all groups
-    [0.5, 1.5, 4.0]    # Elderly: mostly interact with other elderly
+matrix = np.array([
+    [1.0, 2.0, 3.0],   # Young: mostly interact with other young
+    [4.0, 5.0, 6.0],   # Adults: interact with all groups
+    [7.0, 8.0, 9.0]    # Elderly: mostly interact with other elderly
 ])
 
 # Normalize contact matrix
-contact_matrix = contact_matrix / contact_matrix.sum(axis=1, keepdims=True)
+matrix = matrix / matrix.sum(axis=1, keepdims=True)
 
 # Airborne parameters
 aerosol_decay_rate = 0.63
@@ -122,7 +122,7 @@ def age_stratified_sirv_model(y, t, params):
     for i in range(len(age_groups)):  # Infectee group
         for j in range(len(age_groups)):  # Infector group
             # Transmission = contact * susceptibility * infectiousness
-            lambda_matrix[i, j] = (contact_matrix[j, i] * params['susceptibility'][i] * 
+            lambda_matrix[i, j] = (matrix[j, i] * params['susceptibility'][i] * 
                                   current_R0 * env_factor / params['recovery_days'][j])
     
     # Total force of infection on each group
